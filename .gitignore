@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.log
+*.bak*
+*bak_*
+*.out
+*.json
+*.pkl
+*.parquet
+*.gz
+*.csv
+!research/ideatest/events/events.csv
+.polygon_key
+.alert_config
+data_1m/
+cache/

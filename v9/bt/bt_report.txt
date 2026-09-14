@@ -1,0 +1,292 @@
+Loading data...
+  bars=888,741  range=2023-12-22 04:34:00+00:00 -> 2026-07-10 03:59:00+00:00
+  gaps >6h: 149
+    gap of 3 days 01:01:00 ending at 2023-12-25 23:00:00+00:00
+    gap of 3 days 01:01:00 ending at 2024-01-01 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-01-07 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-01-14 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-01-21 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-01-28 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-02-04 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-02-11 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-02-18 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-02-25 23:00:00+00:00
+    gap of 2 days 01:01:00 ending at 2024-03-03 23:00:00+00:00
+    gap of 2 days 00:01:00 ending at 2024-03-10 22:00:00+00:00
+  daily closes=795  regime-covered days=590
+  regime available 2024-08-20 -> 2026-07-09
+Building 5-min bars...
+  5-min bars=177,789
+Running VWAP + TLB...
+Running ORB...
+
+==============================================================================
+STEP 4 — PARITY: generated signals 2026-06-22 -> 2026-07-10 (UTC)
+==============================================================================
+entry_utc        entry_et         sleeve         dir       entry    target cell      taken
+06-22 01:00      06-21 21:00      TLB_LONG       long   30616.75  30896.00 BOTH_BULL no
+06-22 04:50      06-22 00:50      TLB_LONG       long   30572.75  30600.50 BOTH_BULL no
+06-22 07:45      06-22 03:45      VWAP_SHORT_R1  short  30749.50  30717.25 BOTH_BULL no
+06-22 10:10      06-22 06:10      TLB_LONG       long   30754.25  30798.50 BOTH_BULL no
+06-22 11:10      06-22 07:10      TLB_LONG       long   30781.50  30860.25 BOTH_BULL no
+06-22 12:00      06-22 08:00      TLB_LONG       long   30757.75  30804.75 BOTH_BULL no
+06-22 13:40      06-22 09:40      TLB_LONG       long   30920.75  31045.25 BOTH_BULL no
+06-22 14:00      06-22 10:00      TLB_LONG       long   30937.00  31117.25 BOTH_BULL no
+06-22 14:10      06-22 10:10      TLB_LONG       long   30949.75  31142.75 BOTH_BULL YES
+06-22 16:20      06-22 12:20      TLB_LONG       long   30583.50  30664.00 BOTH_BULL no
+06-22 16:50      06-22 12:50      TLB_LONG       long   30577.50  30652.00 BOTH_BULL no
+06-22 17:20      06-22 13:20      TLB_LONG       long   30600.75  30679.50 BOTH_BULL no
+06-22 17:55      06-22 13:55      TLB_LONG       long   30642.25  30725.50 BOTH_BULL no
+06-23 00:45      06-22 20:45      TLB_LONG       long   30604.50  30747.75 BOTH_BULL no
+06-23 09:05      06-23 05:05      TLB_LONG       long   29859.50  29939.00 BOTH_BULL no
+06-23 11:45      06-23 07:45      TLB_LONG       long   29867.75  29983.50 BOTH_BULL no
+06-23 14:20      06-23 10:20      TLB_LONG       long   30011.25  30406.00 BOTH_BULL YES
+06-23 16:45      06-23 12:45      TLB_LONG       long   29900.50  29967.75 BOTH_BULL no
+06-23 19:35      06-23 15:35      TLB_LONG       long   29738.25  29899.25 BOTH_BULL no
+06-23 20:30      06-23 16:30      TLB_LONG       long   29735.75  29838.25 BOTH_BULL no
+06-23 20:45      06-23 16:45      TLB_LONG       long   29730.00  29826.75 BOTH_BULL no
+06-23 21:00      06-23 17:00      TLB_LONG       long   29752.00  29870.75 BOTH_BULL no
+06-23 23:15      06-23 19:15      TLB_LONG       long   29651.25  29670.00 BOTH_BULL no
+06-23 23:50      06-23 19:50      TLB_LONG       long   29733.75  29882.00 BOTH_BULL no
+06-24 03:10      06-23 23:10      VWAP_LONG_R3   long   29670.75  29787.00 BOTH_BULL YES
+06-24 04:40      06-24 00:40      TLB_LONG       long   29743.25  29831.75 ZONE_A    no
+06-24 06:35      06-24 02:35      TLB_LONG       long   29847.25  29897.25 ZONE_A    no
+06-24 07:45      06-24 03:45      TLB_LONG       long   29816.00  29846.00 ZONE_A    no
+06-24 08:15      06-24 04:15      TLB_LONG       long   29858.25  29951.00 ZONE_A    no
+06-24 08:35      06-24 04:35      TLB_LONG       long   29852.50  29942.00 ZONE_A    no
+06-24 10:15      06-24 06:15      TLB_LONG       long   29809.00  29863.00 ZONE_A    no
+06-24 14:50      06-24 10:50      TLB_LONG       long   29832.50  30140.00 ZONE_A    no
+06-24 15:55      06-24 11:55      TLB_LONG       long   29787.00  29870.00 ZONE_A    no
+06-24 16:05      06-24 12:05      TLB_LONG       long   29762.75  29825.50 ZONE_A    no
+06-24 18:10      06-24 14:10      VWAP_LONG_R3   long   29449.75  29704.75 ZONE_A    YES
+06-24 20:25      06-24 16:25      TLB_LONG       long   29990.75  30716.75 ZONE_A    no
+06-24 20:40      06-24 16:40      TLB_LONG       long   30034.50  30804.25 ZONE_A    no
+06-25 01:20      06-24 21:20      TLB_LONG       long   29973.75  30011.50 ZONE_A    no
+06-25 02:55      06-24 22:55      TLB_LONG       long   29991.00  30057.50 ZONE_A    no
+06-25 04:55      06-25 00:55      TLB_LONG       long   30052.25  30106.00 ZONE_A    no
+06-25 05:05      06-25 01:05      TLB_LONG       long   30062.75  30127.00 ZONE_A    no
+06-25 05:50      06-25 01:50      VWAP_SHORT_R1  short  30099.50  30077.75 ZONE_A    no
+06-25 07:20      06-25 03:20      TLB_LONG       long   30155.50  30213.00 ZONE_A    no
+06-25 07:50      06-25 03:50      VWAP_SHORT_R1  short  30168.50  30150.50 ZONE_A    no
+06-25 09:30      06-25 05:30      TLB_LONG       long   30137.25  30163.50 ZONE_A    no
+06-25 10:20      06-25 06:20      TLB_LONG       long   30162.00  30198.25 ZONE_A    no
+06-25 10:30      06-25 06:30      TLB_LONG       long   30164.25  30202.75 ZONE_A    no
+06-25 12:05      06-25 08:05      TLB_LONG       long   30144.50  30190.00 ZONE_A    no
+06-25 14:55      06-25 10:55      TLB_LONG       long   29772.25  30248.75 ZONE_A    no
+06-25 16:10      06-25 12:10      TLB_LONG       long   29790.50  30118.50 ZONE_A    no
+06-25 18:00      06-25 14:00      TLB_LONG       long   29794.50  30002.50 ZONE_A    no
+06-25 18:10      06-25 14:10      TLB_LONG       long   29798.50  30010.50 ZONE_A    no
+06-25 19:45      06-25 15:45      TLB_LONG       long   29673.00  29720.00 ZONE_A    no
+06-25 22:45      06-25 18:45      TLB_LONG       long   29662.00  29707.75 ZONE_A    no
+06-26 00:50      06-25 20:50      TLB_LONG       long   29669.75  29673.25 ZONE_A    no
+06-26 05:15      06-26 01:15      TLB_LONG       long   29349.50  29446.75 ZONE_A    no
+06-26 06:45      06-26 02:45      TLB_LONG       long   29455.25  29621.50 ZONE_A    no
+06-26 10:50      06-26 06:50      TLB_LONG       long   29360.75  29403.75 ZONE_A    no
+06-26 12:05      06-26 08:05      TLB_LONG       long   29382.00  29407.00 ZONE_A    no
+06-26 14:00      06-26 10:00      TLB_LONG       long   29440.50  29699.50 ZONE_A    no
+06-26 19:35      06-26 15:35      TLB_LONG       long   29488.50  29588.25 ZONE_A    no
+06-26 20:55      06-26 16:55      TLB_LONG       long   29292.75  29319.25 ZONE_A    no
+06-29 01:40      06-28 21:40      TLB_LONG       long   29509.75  29656.25 ZONE_A    no
+06-29 03:55      06-28 23:55      TLB_LONG       long   29584.25  29686.25 ZONE_A    no
+06-29 05:25      06-29 01:25      TLB_LONG       long   29535.50  29579.50 ZONE_A    no
+06-29 06:05      06-29 02:05      VWAP_SHORT_R1  short  29620.50  29568.75 ZONE_A    no
+06-29 06:50      06-29 02:50      VWAP_SHORT_R1  short  29642.75  29600.75 ZONE_A    no
+06-29 08:20      06-29 04:20      TLB_LONG       long   29714.00  29773.25 ZONE_A    no
+06-29 08:35      06-29 04:35      TLB_LONG       long   29713.25  29771.75 ZONE_A    no
+06-29 10:05      06-29 06:05      TLB_LONG       long   29695.25  29750.00 ZONE_A    no
+06-29 12:10      06-29 08:10      TLB_LONG       long   29718.75  29740.50 ZONE_A    no
+06-29 13:35      06-29 09:35      TLB_LONG       long   29760.25  29870.25 ZONE_A    no
+06-29 13:45      06-29 09:45      TLB_LONG       long   29786.75  29923.25 ZONE_A    no
+06-29 14:55      06-29 10:55      TLB_LONG       long   29673.75  30073.75 ZONE_A    no
+06-29 17:25      06-29 13:25      VWAP_SHORT_R1  short  29958.50  29916.00 ZONE_A    no
+06-29 18:00      06-29 14:00      VWAP_SHORT_R1  short  30003.50  29968.75 ZONE_A    no
+06-29 18:35      06-29 14:35      TLB_LONG       long   30023.00  30056.25 ZONE_A    no
+06-29 23:10      06-29 19:10      TLB_LONG       long   30036.25  30081.00 ZONE_A    no
+06-30 00:15      06-29 20:15      TLB_LONG       long   30066.50  30141.50 ZONE_A    no
+06-30 01:25      06-29 21:25      TLB_LONG       long   30005.75  30076.75 ZONE_A    no
+06-30 03:20      06-29 23:20      TLB_LONG       long   30053.50  30096.00 ZONE_A    no
+06-30 03:55      06-29 23:55      VWAP_SHORT_R1  short  30106.00  30082.50 ZONE_A    no
+06-30 05:00      06-30 01:00      VWAP_SHORT_R1  short  30186.50  30163.50 BOTH_BULL no
+06-30 07:05      06-30 03:05      TLB_LONG       long   30135.75  30173.50 BOTH_BULL no
+06-30 08:10      06-30 04:10      TLB_LONG       long   30109.00  30111.50 BOTH_BULL no
+06-30 08:30      06-30 04:30      TLB_LONG       long   30125.75  30184.50 BOTH_BULL no
+06-30 09:40      06-30 05:40      TLB_LONG       long   30070.00  30081.00 BOTH_BULL no
+06-30 11:00      06-30 07:00      TLB_LONG       long   30139.75  30193.00 BOTH_BULL no
+06-30 13:45      06-30 09:45      TLB_LONG       long   30215.75  30434.50 BOTH_BULL no
+06-30 14:10      06-30 10:10      VWAP_SHORT_R1  short  30334.25  30274.75 BOTH_BULL no
+06-30 18:20      06-30 14:20      TLB_LONG       long   30541.25  30566.75 BOTH_BULL no
+06-30 18:45      06-30 14:45      TLB_LONG       long   30554.00  30609.25 BOTH_BULL no
+06-30 19:00      06-30 15:00      TLB_LONG       long   30554.50  30610.25 BOTH_BULL YES
+06-30 23:00      06-30 19:00      TLB_LONG       long   30510.00  30535.25 BOTH_BULL no
+07-01 03:00      06-30 23:00      TLB_LONG       long   30438.50  30509.25 BOTH_BULL no
+07-01 08:55      07-01 04:55      TLB_LONG       long   30372.75  30428.00 BOTH_BULL no
+07-01 09:55      07-01 05:55      TLB_LONG       long   30378.50  30418.25 BOTH_BULL no
+07-01 10:30      07-01 06:30      TLB_LONG       long   30395.00  30438.25 BOTH_BULL no
+07-01 10:55      07-01 06:55      TLB_LONG       long   30405.00  30458.25 BOTH_BULL no
+07-01 14:00      07-01 10:00      TLB_LONG       long   30283.75  30479.75 BOTH_BULL no
+07-01 19:05      07-01 15:05      TLB_LONG       long   30178.50  30219.25 BOTH_BULL YES
+07-01 19:35      07-01 15:35      TLB_LONG       long   30213.25  30327.50 BOTH_BULL no
+07-01 22:25      07-01 18:25      TLB_LONG       long   30093.00  30165.50 BOTH_BULL no
+07-02 00:25      07-01 20:25      TLB_LONG       long   30045.75  30139.00 BOTH_BULL no
+07-02 00:50      07-01 20:50      TLB_LONG       long   30051.00  30149.50 BOTH_BULL no
+07-02 07:40      07-02 03:40      TLB_LONG       long   29895.25  29964.25 BOTH_BULL no
+07-02 08:30      07-02 04:30      TLB_LONG       long   29926.25  30025.25 BOTH_BULL no
+07-02 10:40      07-02 06:40      TLB_LONG       long   29999.25  30078.50 BOTH_BULL no
+07-02 11:40      07-02 07:40      TLB_LONG       long   30036.25  30105.50 BOTH_BULL no
+07-02 13:45      07-02 09:45      TLB_LONG       long   30124.25  30130.50 BOTH_BULL no
+07-02 16:15      07-02 12:15      TLB_LONG       long   29646.75  29682.75 BOTH_BULL no
+07-02 17:55      07-02 13:55      TLB_LONG       long   29389.75  29392.00 BOTH_BULL no
+07-02 20:00      07-02 16:00      TLB_LONG       long   29538.00  29726.50 BOTH_BULL no
+07-02 20:10      07-02 16:10      TLB_LONG       long   29541.00  29732.50 BOTH_BULL no
+07-02 20:35      07-02 16:35      TLB_LONG       long   29557.00  29764.50 BOTH_BULL no
+07-02 22:05      07-02 18:05      TLB_LONG       long   29577.75  29806.00 BOTH_BULL no
+07-03 00:15      07-02 20:15      TLB_LONG       long   29617.00  29668.50 BOTH_BULL no
+07-03 01:10      07-02 21:10      TLB_LONG       long   29686.75  29832.50 BOTH_BULL no
+07-03 06:05      07-03 02:05      TLB_LONG       long   29858.25  29922.00 BOTH_BULL no
+07-03 08:40      07-03 04:40      TLB_LONG       long   29865.50  29898.25 BOTH_BULL no
+07-03 09:25      07-03 05:25      TLB_LONG       long   29889.25  29950.75 BOTH_BULL no
+07-03 09:45      07-03 05:45      TLB_LONG       long   29895.75  29963.75 BOTH_BULL no
+07-03 10:30      07-03 06:30      TLB_LONG       long   29876.50  29897.00 BOTH_BULL no
+07-03 10:45      07-03 06:45      TLB_LONG       long   29892.50  29920.50 BOTH_BULL no
+07-03 11:55      07-03 07:55      TLB_LONG       long   29894.00  29921.25 BOTH_BULL no
+07-03 13:30      07-03 09:30      TLB_LONG       long   29920.00  29953.25 BOTH_BULL no
+07-03 13:45      07-03 09:45      TLB_LONG       long   29929.00  29971.25 BOTH_BULL no
+07-03 16:35      07-03 12:35      TLB_LONG       long   29904.50  29914.50 BOTH_BULL no
+07-05 23:15      07-05 19:15      TLB_LONG       long   29990.25  30119.75 BOTH_BULL no
+07-06 02:05      07-05 22:05      TLB_LONG       long   29817.50  29861.25 BOTH_BULL no
+07-06 03:05      07-05 23:05      TLB_LONG       long   29756.00  29762.00 BOTH_BULL no
+07-06 04:40      07-06 00:40      TLB_LONG       long   29818.25  29943.25 BOTH_BULL no
+07-06 06:35      07-06 02:35      TLB_LONG       long   29818.00  29881.25 BOTH_BULL no
+07-06 07:45      07-06 03:45      TLB_LONG       long   29872.75  29915.75 BOTH_BULL no
+07-06 09:55      07-06 05:55      TLB_LONG       long   29883.25  29922.50 BOTH_BULL no
+07-06 10:15      07-06 06:15      TLB_LONG       long   29878.50  29929.50 BOTH_BULL no
+07-06 11:00      07-06 07:00      TLB_LONG       long   29884.50  29916.75 BOTH_BULL no
+07-06 13:50      07-06 09:50      TLB_LONG       long   29952.00  30127.75 BOTH_BULL no
+07-06 17:10      07-06 13:10      TLB_LONG       long   30029.50  30117.75 BOTH_BULL no
+07-06 18:55      07-06 14:55      TLB_LONG       long   29989.50  30030.50 BOTH_BULL no
+07-07 04:35      07-07 00:35      TLB_LONG       long   29641.25  29654.25 ZONE_A    no
+07-07 05:35      07-07 01:35      TLB_LONG       long   29628.25  29640.50 ZONE_A    no
+07-07 12:00      07-07 08:00      TLB_LONG       long   29642.50  29693.75 ZONE_A    no
+07-07 13:45      07-07 09:45      TLB_LONG       long   29595.00  29598.75 ZONE_A    no
+07-07 15:30      07-07 11:30      TLB_LONG       long   29314.00  29418.00 ZONE_A    no
+07-07 15:45      07-07 11:45      TLB_LONG       long   29329.00  29448.00 ZONE_A    no
+07-07 18:00      07-07 14:00      TLB_LONG       long   29567.25  29624.50 ZONE_A    no
+07-07 19:55      07-07 15:55      TLB_LONG       long   29369.00  29467.00 ZONE_A    no
+07-07 20:50      07-07 16:50      TLB_LONG       long   29418.25  29565.50 ZONE_A    no
+07-07 23:20      07-07 19:20      TLB_LONG       long   29404.25  29444.75 ZONE_A    no
+07-08 00:15      07-07 20:15      TLB_LONG       long   29414.50  29473.00 ZONE_A    no
+07-08 02:45      07-07 22:45      TLB_LONG       long   29456.25  29524.50 ZONE_A    no
+07-08 06:25      07-08 02:25      TLB_LONG       long   29352.25  29392.75 ZONE_A    no
+07-08 06:50      07-08 02:50      TLB_LONG       long   29317.50  29323.25 ZONE_A    no
+07-08 07:30      07-08 03:30      TLB_LONG       long   29352.25  29422.25 ZONE_A    no
+07-08 08:55      07-08 04:55      VWAP_LONG_R3   long   29066.25  29393.25 ZONE_A    YES
+07-08 09:55      07-08 05:55      TLB_LONG       long   28983.75  29057.75 ZONE_A    no
+07-08 10:10      07-08 06:10      TLB_LONG       long   28949.50  28989.25 ZONE_A    no
+07-08 12:10      07-08 08:10      TLB_LONG       long   29174.25  29375.50 ZONE_A    no
+07-08 13:35      07-08 09:35      TLB_LONG       long   29303.50  29459.00 ZONE_A    no
+07-08 16:00      07-08 12:00      TLB_LONG       long   29096.25  29158.50 ZONE_A    no
+07-08 18:55      07-08 14:55      TLB_LONG       long   29404.75  29462.00 ZONE_A    no
+07-08 19:55      07-08 15:55      TLB_LONG       long   29460.50  29545.25 ZONE_A    no
+07-08 23:00      07-08 19:00      TLB_LONG       long   29425.50  29446.75 ZONE_A    no
+07-08 23:45      07-08 19:45      TLB_LONG       long   29479.75  29564.50 ZONE_A    no
+07-09 01:20      07-08 21:20      TLB_LONG       long   29540.00  29617.25 ZONE_A    no
+07-09 01:30      07-08 21:30      TLB_LONG       long   29529.00  29595.25 ZONE_A    no
+07-09 02:20      07-08 22:20      TLB_LONG       long   29550.00  29674.00 ZONE_A    no
+07-09 06:00      07-09 02:00      TLB_LONG       long   29607.75  29740.75 ZONE_A    no
+07-09 06:15      07-09 02:15      TLB_LONG       long   29606.25  29737.75 ZONE_A    no
+07-09 06:35      07-09 02:35      VWAP_SHORT_R1  short  29606.00  29567.75 ZONE_A    no
+07-09 08:05      07-09 04:05      TLB_LONG       long   29714.75  29789.00 ZONE_A    no
+07-09 08:20      07-09 04:20      TLB_LONG       long   29714.00  29764.00 ZONE_A    no
+07-09 08:30      07-09 04:30      VWAP_SHORT_R1  short  29699.25  29662.75 ZONE_A    no
+07-09 09:55      07-09 05:55      TLB_LONG       long   29643.75  29658.50 ZONE_A    no
+07-09 11:45      07-09 07:45      TLB_LONG       long   29683.25  29802.00 ZONE_A    no
+07-09 13:35      07-09 09:35      TLB_LONG       long   29778.75  29832.25 ZONE_A    no
+07-09 17:05      07-09 13:05      TLB_LONG       long   29918.25  29972.50 ZONE_A    no
+07-09 20:00      07-09 16:00      TLB_LONG       long   29948.75  29994.75 ZONE_A    no
+07-09 23:20      07-09 19:20      TLB_LONG       long   29946.50  29986.00 ZONE_A    no
+07-10 01:20      07-09 21:20      TLB_LONG       long   29860.50  29916.75 ZONE_A    no
+07-10 03:20      07-09 23:20      VWAP_SHORT_R1  short  29943.25  29923.00 ZONE_A    no
+
+ORB trades in parity window:
+  06-22 14:00 UTC / 06-22 10:00 ET  long  entry=30937.25 exit=30756.75 (STOP/BE) pts=-180.5
+  06-23 14:00 UTC / 06-23 10:00 ET  long  entry=29934.75 exit=29616.5 (STOP/BE) pts=-318.25
+  06-24 14:20 UTC / 06-24 10:20 ET  short entry=29562.25 exit=29841.5 (STOP/BE) pts=-279.25
+  06-26 14:00 UTC / 06-26 10:00 ET  long  entry=29464.5 exit=29464.5 (STOP/BE) pts=0.0
+  06-29 14:00 UTC / 06-29 10:00 ET  short entry=29557.0 exit=29557.0 (STOP/BE) pts=-0.0
+  06-30 14:00 UTC / 06-30 10:00 ET  long  entry=30366.75 exit=30576.75 (EOD) pts=210.0
+  07-01 14:00 UTC / 07-01 10:00 ET  long  entry=30285.0 exit=30109.0 (EOD) pts=-176.0
+  07-02 14:00 UTC / 07-02 10:00 ET  long  entry=30263.0 exit=30007.75 (STOP/BE) pts=-255.25
+  07-06 14:11 UTC / 07-06 10:11 ET  long  entry=30009.0 exit=29955.25 (EOD) pts=-53.75
+  07-07 14:08 UTC / 07-07 10:08 ET  short entry=29420.25 exit=29420.25 (STOP/BE) pts=-0.0
+  07-08 14:47 UTC / 07-08 10:47 ET  short entry=29201.0 exit=29201.0 (STOP/BE) pts=-0.0
+  07-09 14:20 UTC / 07-09 10:20 ET  short entry=29672.0 exit=29931.25 (STOP/BE) pts=-259.25
+
+==============================================================================
+STEP 5 — PER-SLEEVE STATS (per 1 contract, $2/pt)
+==============================================================================
+
+### VWAP_LONG_R3  (n=145)
+  win_rate=36.6%  avg_win=100.2pt  avg_loss=-28.8pt  PF=2.00
+  expectancy=18.36pt / $36.72  total=$5,324 (2662pt)  maxDD=$-572
+  by half-year:  2024H2: n=29 $1,162  2025H1: n=29 $1,082  2025H2: n=51 $566  2026H1: n=35 $2,731  2026H2: n=1 $-218
+  last 10 trades:
+    2026-06-08 02:05 ET long  entry=29050.25 -> 06-08 07:10 exit=29282.75 TARGET      pts=+232.5 R=+3.00
+    2026-06-09 12:25 ET long  entry=28537.75 -> 06-09 12:38 exit=28430.75 STOP        pts=-107.0 R=-1.00
+    2026-06-10 05:30 ET long  entry=28778.25 -> 06-10 07:05 exit=28684.00 STOP        pts=-94.2 R=-1.00
+    2026-06-10 19:45 ET long  entry=28425.00 -> 06-11 04:03 exit=28902.75 TARGET      pts=+477.8 R=+3.00
+    2026-06-12 03:35 ET long  entry=29311.00 -> 06-12 04:02 exit=29464.00 TARGET      pts=+153.0 R=+3.00
+    2026-06-18 00:55 ET long  entry=30339.75 -> 06-18 08:55 exit=30507.00 TARGET      pts=+167.2 R=+3.00
+    2026-06-18 22:25 ET long  entry=30601.50 -> 06-18 23:15 exit=30575.00 STOP        pts=-26.5 R=-1.00
+    2026-06-23 23:10 ET long  entry=29670.75 -> 06-24 00:56 exit=29787.00 TARGET      pts=+116.2 R=+3.00
+    2026-06-24 14:10 ET long  entry=29449.75 -> 06-24 14:49 exit=29364.75 STOP        pts=-85.0 R=-1.00
+    2026-07-08 04:55 ET long  entry=29066.25 -> 07-08 05:08 exit=28957.25 STOP        pts=-109.0 R=-1.00
+
+### VWAP_SHORT_R1  (n=54)
+  win_rate=59.3%  avg_win=30.8pt  avg_loss=-32.0pt  PF=1.40
+  expectancy=5.19pt / $10.39  total=$561 (280pt)  maxDD=$-336
+  by half-year:  2024H2: n=2 $-8  2025H1: n=30 $366  2026H1: n=22 $202
+  last 10 trades:
+    2026-03-25 04:30 ET short entry=24503.75 -> 03-25 04:36 exit=24472.50 TARGET      pts=+31.2 R=+1.00
+    2026-03-27 01:25 ET short entry=23938.00 -> 03-27 02:48 exit=23900.00 TARGET      pts=+38.0 R=+1.00
+    2026-04-01 03:05 ET short entry=24154.25 -> 04-01 03:22 exit=24131.75 TARGET      pts=+22.5 R=+1.00
+    2026-04-01 11:15 ET short entry=24266.25 -> 04-01 11:30 exit=24245.75 TARGET      pts=+20.5 R=+1.00
+    2026-04-01 12:15 ET short entry=24301.50 -> 04-01 12:19 exit=24327.00 STOP        pts=-25.5 R=-1.00
+    2026-04-01 20:50 ET short entry=24220.50 -> 04-01 20:51 exit=24211.25 TARGET      pts=+9.2 R=+1.00
+    2026-04-05 22:35 ET short entry=24303.50 -> 04-05 22:40 exit=24280.25 TARGET      pts=+23.2 R=+1.00
+    2026-04-06 04:20 ET short entry=24320.50 -> 04-06 04:22 exit=24337.25 STOP        pts=-16.8 R=-1.00
+    2026-04-06 05:45 ET short entry=24370.75 -> 04-06 05:54 exit=24343.25 TARGET      pts=+27.5 R=+1.00
+    2026-04-07 05:45 ET short entry=24386.50 -> 04-07 06:09 exit=24351.00 TARGET      pts=+35.5 R=+1.00
+
+### TLB_LONG  (n=276)
+  win_rate=56.9%  avg_win=62.1pt  avg_loss=-69.4pt  PF=1.18
+  expectancy=5.43pt / $10.85  total=$2,996 (1498pt)  maxDD=$-2,004
+  by half-year:  2024H2: n=67 $-84  2025H1: n=61 $1,184  2025H2: n=85 $640  2026H1: n=62 $1,200  2026H2: n=1 $56
+  last 10 trades:
+    2026-06-02 15:05 ET long  entry=30667.75 -> 06-02 15:25 exit=30682.75 EOD         pts=+15.0 R=+0.22
+    2026-06-04 11:00 ET long  entry=30356.50 -> 06-04 14:05 exit=30578.50 TARGET      pts=+222.0 R=+1.08
+    2026-06-05 11:00 ET long  entry=29853.00 -> 06-05 11:15 exit=29728.00 STOP        pts=-125.0 R=-1.32
+    2026-06-09 15:05 ET long  entry=29120.75 -> 06-09 15:25 exit=28891.25 EOD         pts=-229.5 R=-0.26
+    2026-06-12 10:05 ET long  entry=29480.50 -> 06-12 11:25 exit=29745.00 TARGET      pts=+264.5 R=+1.06
+    2026-06-17 11:40 ET long  entry=30444.00 -> 06-17 14:05 exit=30177.00 STOP        pts=-267.0 R=-2.72
+    2026-06-22 10:10 ET long  entry=30949.75 -> 06-22 10:30 exit=30756.50 STOP        pts=-193.2 R=-1.00
+    2026-06-23 10:20 ET long  entry=30011.25 -> 06-23 14:55 exit=29605.75 STOP        pts=-405.5 R=-1.03
+    2026-06-30 15:00 ET long  entry=30554.50 -> 06-30 15:25 exit=30577.50 EOD         pts=+23.0 R=+0.41
+    2026-07-01 15:05 ET long  entry=30178.50 -> 07-01 15:25 exit=30206.50 EOD         pts=+28.0 R=+0.69
+
+### ORB  (n=622)
+  win_rate=33.1%  avg_win=141.8pt  avg_loss=-58.1pt  PF=1.21
+  expectancy=8.15pt / $16.30  total=$10,138 (5069pt)  maxDD=$-4,266
+  by half-year:  2023H2: n=5 $188  2024H1: n=124 $1,966  2024H2: n=122 $7,225  2025H1: n=122 $170  2025H2: n=124 $1,461  2026H1: n=119 $616  2026H2: n=6 $-1,488
+  last 10 trades:
+    2026-06-24 10:20 ET short entry=29562.25 -> 06-24 10:46 exit=29841.50 STOP/BE     pts=-279.2 R=-1.00
+    2026-06-26 10:00 ET long  entry=29464.50 -> 06-26 10:40 exit=29464.50 STOP/BE     pts=+0.0 R=+0.00
+    2026-06-29 10:00 ET short entry=29557.00 -> 06-29 10:30 exit=29557.00 STOP/BE     pts=-0.0 R=-0.00
+    2026-06-30 10:00 ET long  entry=30366.75 -> 06-30 15:55 exit=30576.75 EOD         pts=+210.0 R=+0.63
+    2026-07-01 10:00 ET long  entry=30285.00 -> 07-01 15:55 exit=30109.00 EOD         pts=-176.0 R=-0.89
+    2026-07-02 10:00 ET long  entry=30263.00 -> 07-02 10:27 exit=30007.75 STOP/BE     pts=-255.2 R=-1.00
+    2026-07-06 10:11 ET long  entry=30009.00 -> 07-06 15:55 exit=29955.25 EOD         pts=-53.8 R=-0.23
+    2026-07-07 10:08 ET short entry=29420.25 -> 07-07 12:02 exit=29420.25 STOP/BE     pts=-0.0 R=-0.00
+    2026-07-08 10:47 ET short entry=29201.00 -> 07-08 12:10 exit=29201.00 STOP/BE     pts=-0.0 R=-0.00
+    2026-07-09 10:20 ET short entry=29672.00 -> 07-09 13:06 exit=29931.25 STOP/BE     pts=-259.2 R=-1.00
+
+DONE. CSVs in /root/v9/bt/

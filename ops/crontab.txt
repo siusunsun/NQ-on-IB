@@ -1,0 +1,4 @@
+10 4,5 * * * cd /root/v9 && /root/hsi/venv/bin/python tools/refresh_regime_cache.py >> /root/v9/regime_refresh.log 2>&1
+* * * * * /root/v9/v9_watchdog.sh
+* * * * * /root/r3re_live/r3re_live_watchdog.sh >/dev/null 2>&1
+30 */2 * * * cd /root/v9/bt && /root/hsi/venv/bin/python /root/v9/bt/dash_push.py >> /root/v9/bt/dash_push.log 2>&1
