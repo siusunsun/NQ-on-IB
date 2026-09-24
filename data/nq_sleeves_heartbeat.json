@@ -1,0 +1,55 @@
+{
+ "ts_utc": "2026-09-24T05:27:03+00:00",
+ "phase": "running",
+ "target": "TWS",
+ "sleeves": {
+  "CCI": {
+   "name": "CCI",
+   "in_position": false,
+   "side": null,
+   "entry_price": 0.0,
+   "stop_price": 0.0,
+   "target_price": 0.0,
+   "entry_time": null,
+   "entry_session": null,
+   "qty": 0,
+   "cum_pnl": 0.0,
+   "trades_today": 0,
+   "oca_group": null,
+   "has_bracket": false,
+   "killed": false
+  },
+  "SNAP": {
+   "name": "SNAP",
+   "in_position": false,
+   "side": null,
+   "entry_price": 0.0,
+   "stop_price": 0.0,
+   "target_price": 0.0,
+   "entry_time": null,
+   "entry_session": null,
+   "qty": 0,
+   "cum_pnl": 0.0,
+   "trades_today": 0,
+   "oca_group": null,
+   "has_bracket": false,
+   "killed": false
+  },
+  "TBS": {
+   "name": "TBS",
+   "in_position": false,
+   "side": null,
+   "entry_price": 0.0,
+   "stop_price": 0.0,
+   "target_price": 0.0,
+   "entry_time": null,
+   "entry_session": null,
+   "qty": 0,
+   "cum_pnl": 0.0,
+   "trades_today": 0,
+   "oca_group": null,
+   "has_bracket": false,
+   "killed": false
+  }
+ }
+}
