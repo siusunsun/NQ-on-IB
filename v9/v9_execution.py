@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Optional
 
 import pandas as pd
+import math
 from ib_async import IB, Contract, MarketOrder, StopOrder, LimitOrder
 
 HERE = Path(__file__).resolve().parent
@@ -83,6 +84,13 @@ class TLBLive:
       - LONG when prior close <= line_prev and current close > line_now, where the line
         runs through the last two pivot highs (require_slope_dir=False -> any slope)
       - stop = most recent confirmed pivot low; target = entry + r_multiple * risk
+      - HYBRID STOP (adopted 2026-08-12, mirrors trendline_break.P.hybrid_stop_pts): if the
+        pivot-stop risk is below hybrid_stop_pts, switch the stop to the rolling
+        hybrid_lookback-bar low INCLUDING the signal bar. Fixes the pivot-confirmation-race
+        staleness (the 2026-08-12 second trade: an 8.25pt stop at an already-broken level while
+        the true flush low sat unconfirmed). Walk-forward-validated; 0.0 = off = old behaviour.
+        ⚠️CONVENTION FORK: published backtest figures remain pivot-stop; live-mirror
+        reconstructions from 2026-08-13 must set hybrid_stop_pts=40.
     """
     def __init__(self, k: int = 3, r_multiple: float = 1.0,
                  hybrid_stop_pts: float = 0.0, hybrid_lookback: int = 20):
@@ -122,12 +130,8 @@ class TLBLive:
             if self.c[i_prev] <= line_prev and self.c[i_now] > line_now:
                 entry = self.c[i_now]
                 stop = self.last_pl[-1][1]
-                # HYBRID STOP (2026-08-26, ported from kristov18 trendline_break, his live 08-13):
-                # a sub-threshold pivot risk sits on a just-broken pivot and gets whipsawed; widen it
-                # to the 20-bar structural low (incl signal bar). Only widens tight stops; wide untouched.
                 if self.hybrid_stop_pts > 0 and (entry - stop) < self.hybrid_stop_pts:
-                    _lb = self.hybrid_lookback
-                    stop = min(self.l[max(0, i_now - _lb + 1): i_now + 1])
+                    stop = min(self.l[max(0, n - self.hybrid_lookback):n])
                 risk = entry - stop
                 if risk > 0:
                     return dict(side="long", entry_price=entry, stop_price=stop,
@@ -137,6 +141,20 @@ class TLBLive:
 
 # ---------------- IB order helpers ----------------
 
+NQ_TICK = 0.25
+
+def _tick_round(px: float, direction: str, order_side: str) -> float:
+    """Round a price to the NQ/MNQ 0.25-pt tick grid.
+    For stops: round AWAY from entry (long stop floors down, short stop ceils up).
+    For targets: round TOWARD entry (long target floors down, short target ceils up)."""
+    n = px / NQ_TICK
+    if order_side == "stop":
+        k = math.floor(n + 1e-9) if direction == "long" else math.ceil(n - 1e-9)
+    else:
+        k = math.floor(n + 1e-9) if direction == "long" else math.ceil(n - 1e-9)
+    return round(k * NQ_TICK, 4)
+
+
 def place_market_entry(ib: IB, contract: Contract, direction: str, qty: int):
     action = "BUY" if direction == "long" else "SELL"
     return ib.placeOrder(contract, MarketOrder(action, qty))
@@ -145,6 +163,7 @@ def place_market_entry(ib: IB, contract: Contract, direction: str, qty: int):
 def place_protective_stop(ib: IB, contract: Contract, direction: str, qty: int,
                           stop_px: float, oca: str):
     action = "SELL" if direction == "long" else "BUY"
+    stop_px = _tick_round(stop_px, direction, "stop")
     o = StopOrder(action, qty, stop_px)
     o.tif = "GTC"; o.outsideRth = True   # GTC so the bracket survives the CME 17:00 ET roll + Gateway logoff (overnight VWAP holds)
     o.ocaGroup = oca; o.ocaType = 1  # cancel-with-block: filling one cancels the sibling
@@ -154,6 +173,7 @@ def place_protective_stop(ib: IB, contract: Contract, direction: str, qty: int,
 def place_limit_target(ib: IB, contract: Contract, direction: str, qty: int,
                        target_px: float, oca: str):
     action = "SELL" if direction == "long" else "BUY"
+    target_px = _tick_round(target_px, direction, "target")
     o = LimitOrder(action, qty, target_px)
     o.tif = "GTC"; o.outsideRth = True   # GTC so the bracket survives the CME 17:00 ET roll + Gateway logoff (overnight VWAP holds)
     o.ocaGroup = oca; o.ocaType = 1

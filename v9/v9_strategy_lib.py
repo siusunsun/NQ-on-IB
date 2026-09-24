@@ -37,7 +37,7 @@ class DailyRegime:
         if c == "BOTH_BULL": return ["TLB_LONG", "VWAP_LONG_R3"]
         if c == "ZONE_A":    return ["VWAP_LONG_R3"]
         if c == "ZONE_B":    return ["TLB_LONG"]
-        if c == "BOTH_BEAR": return ["VWAP_SHORT_R1"]
+        if c == "BOTH_BEAR": return ["VWAP_SHORT_R1", "TLB_BEAR_SHORT"]   # TLB_BEAR_SHORT: paper test 2026-09-16, trades only where SLEEVE_ENABLED opts in
         return []
 
 
@@ -61,8 +61,12 @@ def compute_regime(daily_closes: pd.Series, sma_window: int = 200,
         raise ValueError(f"After excluding today, need >= {sma_window+5} bars, got {len(closes)}")
     last_idx = closes.index[-1]
     prev_close = closes.iloc[-1]
+    if not np.isfinite(prev_close):
+        raise ValueError(f"Last daily close is {prev_close} (NaN/Inf) — cannot compute regime")
     sma200 = closes.iloc[-sma_window:].mean()
     ret20 = (closes.iloc[-1] / closes.iloc[-(mom_window+1)]) - 1.0
+    if not np.isfinite(sma200) or not np.isfinite(ret20):
+        raise ValueError(f"Regime inputs not finite: sma200={sma200}, ret20={ret20}")
     return DailyRegime(
         date_et=str(last_idx)[:10],
         close=float(prev_close),
@@ -145,14 +149,54 @@ class VwapState:
     last_lows: list[float] = None      # rolling lookback for swing low (LONG stop)
     last_highs: list[float] = None     # rolling lookback for swing high (SHORT stop)
     swing_lookback: int = 20
-    # ---- swing-buffer gap guard + post-halt blackout (ported from kristov18 ee62ef0, 2026-08-03) ----
-    # Clear swing buffers across a REAL trading halt (>gap_reset_min) so the stop can't span a weekend
-    # gap (the 2026-08-03 incident: 331pt Friday-low stop where 44.5pt was correct). NOT a per-session
-    # reset (every 00:00 UTC would leave 2-3 bars -> toxic micro-stops). 180min clears weekends/holidays,
-    # ignores the 60-min CME maintenance break. Blackout: after a halt the band has no statistical content
-    # yet, so refuse to ARM the streak for N bars (long sleeve only via config; short stays 0).
+    # ---- swing-buffer gap guard (added 2026-08-03 after the 08-03 R3 incident) ----
+    # The VWAP accumulators reset at a session boundary but these swing buffers did NOT, so
+    # min(last_lows) could return a price from the FAR SIDE OF A WEEKEND HALT. On 2026-08-03 that
+    # produced a 331pt stop (Friday 07-31 20:55 low 28258.25) where the correct structural stop was
+    # 44.5pt -- the market had gapped +328pt over the weekend. LIVE skipped it only because the
+    # $500 risk cap fired on the symptom; a smaller gap would have passed under the cap.
+    #
+    # ★NOT a blanket session reset. Emptying the buffer every 00:00 UTC would leave 2-3 bars to
+    # compute the stop from early in EVERY session -> sub-40pt stops, which this repo has measured
+    # as the toxic bucket (v9 TLB min-stop floor; the VWAP-2SD arc's 76% stop rate). That trades a
+    # too-wide bug for a too-tight one on far more trades. Only a REAL multi-hour halt invalidates
+    # the structure, so the buffer clears on the time gap, not on the calendar.
+    #
+    # 180min default: clears weekends (~46h) and holiday halts, ignores the CME daily 60-min
+    # maintenance break (price is continuous across it). Set 0 to disable entirely.
     gap_reset_min: int = 180
     last_bar_utc: Optional[datetime] = None
+    # ---- post-halt blackout (added 2026-08-03, same incident) ----
+    # ROOT CAUSE: the VWAP session is keyed to the UTC CALENDAR DATE, but NQ does not trade every
+    # calendar date. 2026-08-01 is a "session" with ZERO bars; 2026-08-02 has 24 (the 22:00-24:00
+    # UTC Sunday reopen) against a normal session's 276. The trigger then evaluated a real rule
+    # against a band built from ~10 observations of a market shut for 46h -- price was never below
+    # a lower 2sd band in any meaningful sense.
+    #
+    # WHY NOT REDEFINE THE SESSION: carrying prior data across the halt (weekly anchor) was
+    # backtested and DESTROYS the sleeve -- expR +0.0563 -> +0.0033 (t 0.05), maxDD -$25,720 ->
+    # -$49,680, per-year erratic. R3 is validated as a DAILY session-VWAP reversion; a weekly band
+    # is a different strategy, not a fix. The band SHOULD reset daily.
+    #
+    # WHY THIS KEYS ON THE HALT, NOT THE SESSION: a session-bar gate fires at EVERY 00:00-UTC
+    # rollover = 7.4% of all bars, every day at 20:00 ET, costing 90min of the Asia-evening block
+    # the ledger deliberately keeps. Keying on the halt touches only 2.12% of bars, all after
+    # weekends/holidays, and leaves ordinary rollovers alone. (The session-bar variant was built,
+    # measured and discarded for exactly this.)
+    #
+    # HONEST COST: backtested ~neutral-to-slightly-negative (expR +0.0563 -> +0.0516, ~-$2.4k over
+    # 5.5y, maxDD ~$4k worse). A VALIDITY guard, not an edge filter -- same category as
+    # _tlb_risk_ok. 24 bars = 2h; >=17 required to cover 2026-08-03 (that trigger sat 16 bars
+    # after the reopen). Set 0 to disable.
+    # ⚠️DEFAULT 0; the LIVE config enables it for the LONG SLEEVE ONLY (2026-08-03 final, after
+    # the live-feed adjudication reversed the interim call). Cell-split evidence: every
+    # DEPLOYED-TAKEABLE post-halt LONG lost (2026-05-25 -1.01 + live 08-03 -1R = 0W/2L; the live
+    # one STOPPED ON ITS OWN ENTRY BAR under the corrected 44.5pt stop) while the class's winners
+    # (+2.99/+2.92) sit in bear cells the BOTH_BULL|ZONE_A gate already excludes -> the blackout
+    # forfeits nothing reachable. SHORT stays 0: its deployed BOTH_BEAR cell is 3W/1L and the
+    # gated book WORSENS with a blackout (+$12,805 -> +$9,445) -- fading a weekend gap-up WORKS in
+    # a bear (rallies fade) and loses in a bull (continuation): the regime gate protects the
+    # short and exposes the long. >=17 required to cover the 08-03 case; 24 = 2h.
     post_halt_blackout_bars: int = 0
     bars_since_halt: int = 0
 
@@ -174,13 +218,16 @@ class VwapState:
             self.consecutive_outside = 0
         self.cumv, self.cumvp, self.cumsq, vwap, sd = update_session_vwap(
             self.cumv, self.cumvp, self.cumsq, high, low, close, volume)
-        # ★Clear swing buffers across a real trading halt (gap_reset_min) BEFORE the append, so the
-        # incoming bar seeds a fresh, structurally-connected window. Stop can't span the halt.
+        # Expose the current session VWAP/sd for the TLB VWAP-z shadow tracker (read-only; the
+        # early `return None` below must not hide these from a caller that needs this bar's z).
+        self.last_vwap, self.last_sd = vwap, sd
+        # ★Clear the swing buffers across a real trading halt (see gap_reset_min above). Done
+        # BEFORE the append so the incoming bar seeds a fresh, structurally-connected window.
         if self.gap_reset_min and self.last_bar_utc is not None:
             gap_min = (bar_time_utc - self.last_bar_utc).total_seconds() / 60.0
             if gap_min > self.gap_reset_min:
-                self.last_lows.clear(); self.last_highs.clear()
-                self.bars_since_halt = 0
+                self.last_lows.clear(); self.last_highs.clear()   # stop can't span the halt
+                self.bars_since_halt = 0                          # and the band restarts empty
         self.bars_since_halt += 1
         self.last_bar_utc = bar_time_utc
         # Track swing high/low
@@ -189,8 +236,9 @@ class VwapState:
         if len(self.last_highs) > self.swing_lookback: self.last_highs.pop(0)
         if np.isnan(vwap) or np.isnan(sd) or sd == 0:
             return None
-        # ★post-halt blackout: after a real halt the band has no statistical content yet, so it must
-        # not ARM a streak. Returns BEFORE the outside-band counters, exactly like the sd==0 guard.
+        # ★post-halt blackout: after a real trading halt the band has no statistical content yet,
+        # so it must not be able to ARM a streak. Returns BEFORE the outside-band counters,
+        # exactly like the sd==0 guard.
         if self.post_halt_blackout_bars and self.bars_since_halt < self.post_halt_blackout_bars:
             return None
         upper = vwap + self.entry_band_k * sd
