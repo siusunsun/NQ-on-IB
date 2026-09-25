@@ -27,6 +27,7 @@ class SleeveState:
     realized_R: float = 0.0
     trade_count_today: int = 0
     qty: int = 0                           # actual contracts held (0 when flat)
+    entry_session: Optional[str] = None    # TBS: which session (PRE/OPEN/MIDDAY) entered in
 
 
 @dataclass

@@ -1,19 +1,12 @@
-"""nq_dashboard.py — Generate an HTML dashboard comparing BOT / IB / FTMO fills.
+"""nq_dashboard.py — NQ v9.2 Dashboard: Theoretical / IB / FTMO three-layer comparison.
 
 Reads:
-  - nq_sleeves_ledger.jsonl       (BOT signals + IB fills)
-  - nq_sleeves_ledger_ftmo.jsonl  (FTMO fills, from the FTMO-target bot)
-  - nq_sleeves_heartbeat.json     (live status)
-  - nq_sleeves_state.json         (current positions)
-  - ftmo_fills.jsonl              (FTMO bridge fill log, synced from MT5 machine)
+  /root/v9/v9_live_heartbeat.json   (bot status, sleeve states)
+  /root/v9/v9_live_trade_log.json   (IB fills from record_v9_fill)
+  /root/v9/v9_ftmo_fills.jsonl      (FTMO fills from EA, synced from MT5)
 
 Outputs:
-  - nq_dashboard.html (static, auto-refreshes every 60s)
-
-Usage:
-  python nq_dashboard.py                 # one-shot generate
-  python nq_dashboard.py --watch         # regenerate every 60s
-  python nq_dashboard.py --serve 8095    # serve on HTTP port
+  nq_dashboard.html (static, auto-refreshes every 60s)
 """
 from __future__ import annotations
 import argparse
@@ -28,20 +21,29 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
-HKT = ZoneInfo("Asia/Hong_Kong")
 HERE = Path(__file__).resolve().parent
 
-# ---- data files (all relative to HERE) ----
-IB_LEDGER     = HERE / "nq_sleeves_ledger.jsonl"
-FTMO_LEDGER   = HERE / "nq_sleeves_ledger_ftmo.jsonl"
-FTMO_FILLS    = HERE / "ftmo_fills.jsonl"
-HEARTBEAT     = HERE / "nq_sleeves_heartbeat.json"
-STATE_FILE    = HERE / "nq_sleeves_state.json"
+# ---- data files ----
+V9_DIR        = Path("/root/v9")
+HEARTBEAT     = V9_DIR / "v9_live_heartbeat.json"
+IB_TRADE_LOG  = V9_DIR / "v9_live_trade_log.json"
+FTMO_FILLS    = V9_DIR / "v9_ftmo_fills.jsonl"
 OUTPUT_HTML   = HERE / "nq_dashboard.html"
 
-KILL_LINES  = {"CCI": -2213, "SNAP": -2969, "TBS": -1646}
-REVIEW_LINES = {"CCI": -1660, "SNAP": -2227, "TBS": -1235}
-SLEEVES = ["CCI", "SNAP", "TBS"]
+SLEEVES = ["VWAP_LONG_R3", "R3_REV", "CCI_AM", "TLB_BEAR_SHORT"]
+SLEEVE_SHORT = {"VWAP_LONG_R3": "VWAP_R3", "R3_REV": "R3_REV",
+                "CCI_AM": "CCI_AM", "TLB_BEAR_SHORT": "TBS"}
+SLEEVE_COLORS = {"VWAP_LONG_R3": "#58a6ff", "R3_REV": "#bc8cff",
+                 "CCI_AM": "#3fb950", "TLB_BEAR_SHORT": "#f0883e"}
+
+V2_START = "2026-09-25"
+
+
+def load_json(path, default=None):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default or {}
 
 
 def load_jsonl(path):
@@ -56,11 +58,6 @@ def load_jsonl(path):
         pass
     return rows
 
-def load_json(path, default=None):
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return default or {}
 
 def fmt_ts(ts_str):
     if not ts_str:
@@ -73,11 +70,24 @@ def fmt_ts(ts_str):
     except Exception:
         return str(ts_str)[:16]
 
+
+def fmt_ts_utc(ts_str):
+    if not ts_str:
+        return ""
+    try:
+        dt = datetime.strptime(ts_str, "%Y-%m-%d %H:%M:%S")
+        dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(ET).strftime("%m-%d %H:%M")
+    except Exception:
+        return str(ts_str)[:16]
+
+
 def fmt_px(px):
     try:
         return f"{float(px):,.2f}"
     except Exception:
-        return str(px)
+        return "—"
+
 
 def fmt_pnl(pnl):
     try:
@@ -85,185 +95,200 @@ def fmt_pnl(pnl):
         cls = "pos" if v >= 0 else "neg"
         return f'<span class="{cls}">${v:+,.0f}</span>'
     except Exception:
-        return str(pnl)
+        return ""
 
 
-def build_trade_table(ib_rows, ftmo_rows, ftmo_fill_rows):
-    """Build a unified trade table: one row per BOT signal, matched to IB and FTMO fills."""
+def build_ib_trades(fills):
+    """Pair entry/exit fills into round-trip trades for the table."""
     trades = []
-
-    # Index FTMO fills by approximate time for matching
-    ftmo_map = {}
-    for r in ftmo_fill_rows:
-        key = (r.get("sleeve", ""), r.get("ev", ""), r.get("side", ""))
-        ftmo_map.setdefault(key, []).append(r)
-
-    for r in ib_rows:
-        trade = {
-            "ts": r.get("ts_utc", ""),
-            "sleeve": r.get("sleeve", ""),
-            "ev": r.get("ev", ""),
-            "side": r.get("side", ""),
-            # BOT signal
-            "bot_px": r.get("px") or r.get("entry", ""),
-            "bot_stop": r.get("stop", ""),
-            "bot_target": r.get("target", ""),
-            # IB fill (same as bot for now — they come from the same ledger)
-            "ib_px": r.get("px") or r.get("exit", ""),
-            "ib_qty": r.get("qty", ""),
-            # P&L
-            "pnl_pts": r.get("pnl_pts", ""),
-            "pnl_usd": r.get("pnl_usd", ""),
-            "cum_pnl": r.get("cum_pnl", ""),
-            "reason": r.get("reason", ""),
-            # FTMO (try to match)
-            "ftmo_px": "",
-            "ftmo_slip": "",
-        }
-        trades.append(trade)
-
-    # FTMO-only rows (from the FTMO ledger)
-    for r in ftmo_rows:
-        trade = {
-            "ts": r.get("ts_utc", ""),
-            "sleeve": r.get("sleeve", ""),
-            "ev": r.get("ev", ""),
-            "side": r.get("side", ""),
-            "bot_px": r.get("px") or r.get("entry", ""),
-            "bot_stop": r.get("stop", ""),
-            "bot_target": r.get("target", ""),
-            "ib_px": "",
-            "ib_qty": "",
-            "pnl_pts": r.get("pnl_pts", ""),
-            "pnl_usd": r.get("pnl_usd", ""),
-            "cum_pnl": r.get("cum_pnl", ""),
-            "reason": r.get("reason", ""),
-            "ftmo_px": r.get("px") or r.get("exit", ""),
-            "ftmo_slip": "",
-        }
-        trades.append(trade)
-
-    # Sort by timestamp
-    trades.sort(key=lambda t: t.get("ts", ""), reverse=True)
+    open_entries = {}
+    for f in fills:
+        sleeve = f.get("instrument", "")
+        if sleeve not in SLEEVES:
+            continue
+        if f.get("time", "") < V2_START:
+            continue
+        label = f.get("label", "")
+        if "ENTRY" in label:
+            open_entries[sleeve] = f
+            trades.append({
+                "time": f["time"],
+                "sleeve": sleeve,
+                "event": "ENTRY",
+                "side": f.get("side", ""),
+                "signal_px": f.get("signal_px"),
+                "ib_px": f.get("price"),
+                "stop": f.get("stop"),
+                "target": f.get("target"),
+                "pnl_usd": None,
+                "pnl_R": None,
+                "reason": None,
+            })
+        else:
+            trades.append({
+                "time": f["time"],
+                "sleeve": sleeve,
+                "event": "EXIT",
+                "side": f.get("side", ""),
+                "signal_px": f.get("signal_px"),
+                "ib_px": f.get("price"),
+                "stop": None,
+                "target": None,
+                "pnl_usd": f.get("realized"),
+                "pnl_R": f.get("realized_R"),
+                "reason": f.get("reason", label),
+            })
+            open_entries.pop(sleeve, None)
+    trades.sort(key=lambda t: t.get("time", ""), reverse=True)
     return trades
 
 
-def build_summary(ib_rows, state):
-    """Per-sleeve summary: trades today, cum P&L, kill line proximity."""
-    summary = {}
-    for name in SLEEVES:
-        sl_state = state.get("sleeves", {}).get(name, {})
-        cum_pnl = sl_state.get("cum_pnl", 0)
-        kill = KILL_LINES.get(name, -9999)
-        review = REVIEW_LINES.get(name, -9999)
+def build_ftmo_index(ftmo_rows):
+    """Index FTMO fills by (sleeve, event, approx time) for matching."""
+    idx = {}
+    for r in ftmo_rows:
+        key = (r.get("sleeve", ""), r.get("event", ""))
+        idx.setdefault(key, []).append(r)
+    return idx
 
-        # Count trades from ledger
-        entries = [r for r in ib_rows if r.get("sleeve") == name and r.get("ev") == "ENTRY"]
-        exits = [r for r in ib_rows if r.get("sleeve") == name and r.get("ev") == "EXIT"]
 
-        summary[name] = {
-            "in_position": sl_state.get("in_position", False),
-            "side": sl_state.get("side"),
-            "entry_price": sl_state.get("entry_price", 0),
-            "cum_pnl": cum_pnl,
-            "trades_today": sl_state.get("trades_today", 0),
-            "total_trades": len(entries),
-            "killed": sl_state.get("killed", False),
-            "kill_line": kill,
-            "review_line": review,
-            "kill_pct": min(100, max(0, (cum_pnl / kill * 100))) if kill < 0 else 0,
-            "last_trade_ts": exits[-1].get("ts_utc", "") if exits else "",
-        }
-    return summary
+def match_ftmo(trade, ftmo_idx):
+    """Find the FTMO fill that matches an IB trade."""
+    key = (trade["sleeve"], trade["event"])
+    candidates = ftmo_idx.get(key, [])
+    if not candidates:
+        return None
+    trade_time = trade.get("time", "")
+    best = None
+    best_dt = timedelta(hours=999)
+    for c in candidates:
+        try:
+            ct = datetime.strptime(c.get("time", "")[:19], "%Y-%m-%d %H:%M:%S")
+            tt = datetime.strptime(trade_time[:19], "%Y-%m-%d %H:%M:%S")
+            dt = abs(ct - tt)
+            if dt < best_dt and dt < timedelta(minutes=5):
+                best_dt = dt
+                best = c
+        except Exception:
+            continue
+    return best
 
 
 def generate_html():
-    ib_rows = load_jsonl(IB_LEDGER)
-    ftmo_rows = load_jsonl(FTMO_LEDGER)
-    ftmo_fill_rows = load_jsonl(FTMO_FILLS)
     hb = load_json(HEARTBEAT)
-    state = load_json(STATE_FILE)
+    ib_log = load_json(IB_TRADE_LOG, {"fills": []})
+    ftmo_rows = load_jsonl(FTMO_FILLS)
+    ftmo_idx = build_ftmo_index(ftmo_rows)
 
-    trades = build_trade_table(ib_rows, ftmo_rows, ftmo_fill_rows)
-    summary = build_summary(ib_rows, state)
+    fills = ib_log.get("fills", [])
+    trades = build_ib_trades(fills)
 
     now_et = datetime.now(ET).strftime("%Y-%m-%d %H:%M:%S ET")
-    hb_ts = fmt_ts(hb.get("ts_utc", ""))
-    hb_phase = hb.get("phase", "unknown")
-    hb_target = hb.get("target", "?")
+    hb_ts = fmt_ts(hb.get("last_heartbeat", ""))
+    connected = hb.get("connected", False)
+    halted = hb.get("halted", False)
+    regime = hb.get("regime_cell", "?")
+    cum_pnl = hb.get("cum_realized_usd", 0)
 
-    # Status color
-    if hb_phase == "running":
-        status_cls = "status-ok"
-    elif hb_phase == "disabled":
-        status_cls = "status-warn"
+    if halted:
+        status_cls, status_txt = "status-err", "HALTED"
+    elif connected:
+        status_cls, status_txt = "status-ok", "RUNNING"
     else:
-        status_cls = "status-err"
+        status_cls, status_txt = "status-warn", "DISCONNECTED"
 
-    # Build sleeve cards
+    # Sleeve cards
     cards_html = ""
+    sleeves_data = hb.get("sleeves", {})
     for name in SLEEVES:
-        s = summary[name]
-        pos_badge = ""
-        if s["in_position"]:
-            pos_badge = f'<span class="badge badge-live">{s["side"].upper()} @ {fmt_px(s["entry_price"])}</span>'
-        elif s["killed"]:
-            pos_badge = '<span class="badge badge-killed">KILLED</span>'
-        else:
-            pos_badge = '<span class="badge badge-flat">FLAT</span>'
+        s = sleeves_data.get(name, {})
+        color = SLEEVE_COLORS.get(name, "#58a6ff")
+        short = SLEEVE_SHORT.get(name, name)
+        active = s.get("active_today", False)
+        in_pos = s.get("in_position", False)
+        side = s.get("side", "")
+        entry_px = s.get("entry_price")
+        r_today = s.get("realized_R", 0)
+        trades_today = s.get("trade_count_today", 0)
 
-        kill_bar_cls = "bar-ok"
-        if s["kill_pct"] > 75:
-            kill_bar_cls = "bar-danger"
-        elif s["kill_pct"] > 50:
-            kill_bar_cls = "bar-warn"
+        if in_pos and side:
+            badge = f'<span class="badge badge-live">{side.upper()} @ {fmt_px(entry_px)}</span>'
+        elif not active:
+            badge = '<span class="badge badge-inactive">INACTIVE</span>'
+        else:
+            badge = '<span class="badge badge-flat">FLAT</span>'
+
+        # Cum P&L from IB trade log (v2 fills only)
+        sleeve_pnl = sum(f.get("realized", 0) or 0 for f in fills
+                         if f.get("instrument") == name
+                         and f.get("time", "") >= V2_START
+                         and f.get("realized") is not None)
+        sleeve_trades = sum(1 for f in fills
+                            if f.get("instrument") == name
+                            and f.get("time", "") >= V2_START
+                            and "ENTRY" in f.get("label", ""))
 
         cards_html += f"""
-        <div class="card">
+        <div class="card" style="border-top: 3px solid {color}">
           <div class="card-header">
-            <h3>{name}</h3>
-            {pos_badge}
+            <h3>{short}</h3>
+            {badge}
           </div>
           <div class="card-body">
             <div class="stat">
-              <span class="label">Cum P&L</span>
-              <span class="value">{fmt_pnl(s['cum_pnl'])}</span>
+              <span class="label">IB Cum P&L</span>
+              <span class="value">{fmt_pnl(sleeve_pnl) if sleeve_trades > 0 else '<span class="muted">—</span>'}</span>
             </div>
             <div class="stat">
-              <span class="label">Total Trades</span>
-              <span class="value">{s['total_trades']}</span>
+              <span class="label">Trades (v9.2)</span>
+              <span class="value">{sleeve_trades}</span>
             </div>
             <div class="stat">
               <span class="label">Today</span>
-              <span class="value">{s['trades_today']}</span>
+              <span class="value">{trades_today}</span>
             </div>
-            <div class="kill-section">
-              <span class="label">Kill Line (${s['kill_line']:,})</span>
-              <div class="kill-bar">
-                <div class="kill-fill {kill_bar_cls}" style="width:{s['kill_pct']:.0f}%"></div>
-              </div>
+            <div class="stat">
+              <span class="label">R Today</span>
+              <span class="value">{r_today:+.2f}R</span>
             </div>
           </div>
         </div>"""
 
-    # Build trade rows
+    # Trade log rows
     rows_html = ""
-    for t in trades[:100]:  # last 100 trades
-        ev_cls = "ev-entry" if t["ev"] == "ENTRY" else "ev-exit"
+    for t in trades[:80]:
+        ev_cls = "ev-entry" if t["event"] == "ENTRY" else "ev-exit"
+        color = SLEEVE_COLORS.get(t["sleeve"], "#58a6ff")
+        short = SLEEVE_SHORT.get(t["sleeve"], t["sleeve"])
+
+        # FTMO matching
+        ftmo = match_ftmo(t, ftmo_idx)
+        ftmo_px = fmt_px(ftmo["fill_px"]) if ftmo else "—"
+
+        # Slippage
+        slip_html = ""
+        if t["signal_px"] and t["ib_px"]:
+            slip = abs(t["ib_px"] - t["signal_px"])
+            slip_html = f'{slip:.1f}'
+
         rows_html += f"""
         <tr>
-          <td>{fmt_ts(t['ts'])}</td>
-          <td><span class="sleeve-tag">{t['sleeve']}</span></td>
-          <td class="{ev_cls}">{t['ev']}</td>
+          <td>{fmt_ts_utc(t['time'])}</td>
+          <td><span class="sleeve-tag" style="border-left:3px solid {color}">{short}</span></td>
+          <td class="{ev_cls}">{t['event']}</td>
           <td>{t.get('side', '')}</td>
-          <td class="px">{fmt_px(t['bot_px'])}</td>
-          <td class="px">{fmt_px(t['ib_px']) if t['ib_px'] else '—'}</td>
-          <td class="px">{fmt_px(t['ftmo_px']) if t['ftmo_px'] else '—'}</td>
-          <td>{fmt_px(t['bot_stop']) if t['bot_stop'] else '—'}</td>
-          <td>{t.get('reason', '')}</td>
-          <td>{fmt_pnl(t['pnl_usd']) if t['pnl_usd'] else ''}</td>
-          <td>{fmt_pnl(t['cum_pnl']) if t['cum_pnl'] else ''}</td>
+          <td class="px">{fmt_px(t.get('signal_px'))}</td>
+          <td class="px">{fmt_px(t.get('ib_px'))}</td>
+          <td class="px">{ftmo_px}</td>
+          <td class="px slip">{slip_html}</td>
+          <td>{t.get('reason') or '—'}</td>
+          <td>{fmt_pnl(t['pnl_usd']) if t['pnl_usd'] is not None else ''}</td>
+          <td>{f"{t['pnl_R']:+.2f}R" if t['pnl_R'] is not None else ''}</td>
         </tr>"""
+
+    # FTMO cumulative
+    ftmo_cum = sum(r.get("pnl_usd", 0) for r in ftmo_rows if r.get("event") == "EXIT")
+    ftmo_count = sum(1 for r in ftmo_rows if r.get("event") == "ENTRY")
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -271,67 +296,69 @@ def generate_html():
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="60">
-<title>NQ Sleeves Dashboard</title>
+<title>NQ v9.2 Dashboard</title>
 <style>
 :root {{
   --bg: #0d1117; --surface: #161b22; --border: #30363d;
   --text: #e6edf3; --text2: #8b949e; --accent: #58a6ff;
   --pos: #3fb950; --neg: #f85149; --warn: #d29922;
-  --entry: #1f6feb33; --exit: #da3633aa;
 }}
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
 body {{ font-family: -apple-system, 'Segoe UI', Helvetica, sans-serif;
        background: var(--bg); color: var(--text); padding: 16px; }}
-h1 {{ font-size: 1.4rem; margin-bottom: 4px; }}
-.header {{ display: flex; justify-content: space-between; align-items: center;
+h1 {{ font-size: 1.4rem; margin-bottom: 2px; }}
+.subtitle {{ color: var(--text2); font-size: 0.85rem; }}
+.header {{ display: flex; justify-content: space-between; align-items: flex-start;
            padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }}
-.header-right {{ text-align: right; font-size: 0.85rem; color: var(--text2); }}
+.header-right {{ text-align: right; font-size: 0.82rem; color: var(--text2); }}
 .status {{ display: inline-block; padding: 2px 10px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; }}
 .status-ok {{ background: #238636; color: #fff; }}
 .status-warn {{ background: #9e6a03; color: #fff; }}
 .status-err {{ background: #da3633; color: #fff; }}
 
-.cards {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.summary-bar {{ display: flex; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }}
+.summary-item {{ background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+                 padding: 10px 16px; min-width: 140px; }}
+.summary-item .label {{ font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }}
+.summary-item .value {{ font-size: 1.2rem; font-weight: 700; margin-top: 2px; }}
+
+.cards {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 12px; margin-bottom: 20px; }}
 .card {{ background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }}
 .card-header {{ display: flex; justify-content: space-between; align-items: center;
                 padding: 10px 14px; border-bottom: 1px solid var(--border); }}
-.card-header h3 {{ font-size: 1.1rem; }}
-.card-body {{ padding: 12px 14px; }}
-.stat {{ display: flex; justify-content: space-between; padding: 4px 0; }}
-.label {{ color: var(--text2); font-size: 0.85rem; }}
+.card-header h3 {{ font-size: 1.05rem; }}
+.card-body {{ padding: 10px 14px; }}
+.stat {{ display: flex; justify-content: space-between; padding: 3px 0; }}
+.label {{ color: var(--text2); font-size: 0.83rem; }}
 .value {{ font-weight: 600; }}
+.muted {{ color: var(--text2); }}
 
-.badge {{ padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }}
+.badge {{ padding: 2px 8px; border-radius: 10px; font-size: 0.73rem; font-weight: 600; }}
 .badge-live {{ background: #238636; color: #fff; }}
 .badge-flat {{ background: var(--border); color: var(--text2); }}
-.badge-killed {{ background: #da3633; color: #fff; }}
+.badge-inactive {{ background: #21262d; color: #484f58; }}
 
-.kill-section {{ margin-top: 8px; }}
-.kill-bar {{ background: var(--border); border-radius: 4px; height: 8px; margin-top: 4px; overflow: hidden; }}
-.kill-fill {{ height: 100%; border-radius: 4px; transition: width 0.3s; }}
-.bar-ok {{ background: var(--pos); }}
-.bar-warn {{ background: var(--warn); }}
-.bar-danger {{ background: var(--neg); }}
-
-table {{ width: 100%; border-collapse: collapse; font-size: 0.85rem; }}
-thead {{ position: sticky; top: 0; }}
-th {{ background: var(--surface); color: var(--text2); text-align: left; padding: 8px 6px;
+table {{ width: 100%; border-collapse: collapse; font-size: 0.82rem; }}
+thead {{ position: sticky; top: 0; z-index: 1; }}
+th {{ background: var(--surface); color: var(--text2); text-align: left; padding: 8px 5px;
       border-bottom: 2px solid var(--border); font-weight: 600; white-space: nowrap; }}
-td {{ padding: 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }}
+td {{ padding: 5px; border-bottom: 1px solid var(--border); white-space: nowrap; }}
 tr:hover {{ background: #1c2128; }}
-.px {{ font-family: 'SF Mono', Consolas, monospace; }}
+.px {{ font-family: 'SF Mono', Consolas, monospace; font-size: 0.8rem; }}
+.slip {{ color: var(--warn); font-size: 0.78rem; }}
 .ev-entry {{ color: var(--accent); font-weight: 600; }}
 .ev-exit {{ color: var(--warn); }}
-.sleeve-tag {{ background: var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.8rem; }}
+.sleeve-tag {{ padding: 1px 6px; border-radius: 4px; font-size: 0.78rem; background: var(--border); }}
 .pos {{ color: var(--pos); font-weight: 600; }}
 .neg {{ color: var(--neg); font-weight: 600; }}
-
 .table-wrap {{ overflow-x: auto; }}
-.footer {{ margin-top: 16px; font-size: 0.75rem; color: var(--text2); text-align: center; }}
-
+.section-title {{ font-size: 1.05rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }}
+.section-title .count {{ font-size: 0.8rem; color: var(--text2); font-weight: 400; }}
+.footer {{ margin-top: 16px; font-size: 0.72rem; color: var(--text2); text-align: center; }}
 @media (max-width: 600px) {{
   .cards {{ grid-template-columns: 1fr; }}
+  .summary-bar {{ gap: 8px; }}
   body {{ padding: 8px; }}
 }}
 </style>
@@ -339,13 +366,32 @@ tr:hover {{ background: #1c2128; }}
 <body>
 <div class="header">
   <div>
-    <h1>NQ Sleeves — Live Dashboard</h1>
-    <span style="color:var(--text2); font-size:0.85rem;">CCI AM + SNAP + TBS | 1 MNQ per sleeve</span>
+    <h1>NQ v9.2 — Live Dashboard</h1>
+    <span class="subtitle">VWAP_R3 + R3_REV + CCI_AM + TBS &middot; 1 MNQ (IB) + $100 risk (FTMO)</span>
   </div>
   <div class="header-right">
-    <span class="status {status_cls}">{hb_phase.upper()}</span><br>
-    <span>Target: {hb_target} | {now_et}</span><br>
+    <span class="status {status_cls}">{status_txt}</span><br>
+    <span>Regime: <b>{regime}</b> &middot; {now_et}</span><br>
     <span>Heartbeat: {hb_ts}</span>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="summary-item">
+    <div class="label">IB P&L (v9.2)</div>
+    <div class="value">{fmt_pnl(cum_pnl)}</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">FTMO P&L</div>
+    <div class="value">{fmt_pnl(ftmo_cum) if ftmo_count > 0 else '<span class="muted">awaiting sync</span>'}</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">IB Trades</div>
+    <div class="value">{sum(1 for f in fills if f.get("time","") >= V2_START and "ENTRY" in f.get("label",""))}</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">FTMO Trades</div>
+    <div class="value">{ftmo_count if ftmo_count > 0 else '<span class="muted">—</span>'}</div>
   </div>
 </div>
 
@@ -353,25 +399,27 @@ tr:hover {{ background: #1c2128; }}
 {cards_html}
 </div>
 
-<h2 style="font-size:1.1rem; margin-bottom:10px;">Trade Log</h2>
+<div class="section-title">
+  Trade Log <span class="count">({len(trades)} fills)</span>
+</div>
 <div class="table-wrap">
 <table>
 <thead>
 <tr>
   <th>Time (ET)</th><th>Sleeve</th><th>Event</th><th>Side</th>
-  <th>BOT Px</th><th>IB Fill</th><th>FTMO Fill</th>
-  <th>Stop</th><th>Reason</th><th>P&L</th><th>Cum P&L</th>
+  <th>Signal</th><th>IB Fill</th><th>FTMO Fill</th><th>Slip</th>
+  <th>Reason</th><th>P&L</th><th>R</th>
 </tr>
 </thead>
 <tbody>
-{rows_html if rows_html else '<tr><td colspan="11" style="text-align:center; color:var(--text2); padding:20px;">No trades yet — bot is running, waiting for signals</td></tr>'}
+{rows_html if rows_html else '<tr><td colspan="11" style="text-align:center; color:var(--text2); padding:24px;">No v9.2 trades yet — bot armed, waiting for signals</td></tr>'}
 </tbody>
 </table>
 </div>
 
 <div class="footer">
-  Auto-refreshes every 60s &middot; Data from nq_sleeves_ledger.jsonl &middot;
-  Kill lines: CCI ${KILL_LINES['CCI']:,} / SNAP ${KILL_LINES['SNAP']:,} / TBS ${KILL_LINES['TBS']:,}
+  Auto-refreshes every 60s &middot; IB fills from v9_live_trade_log.json &middot; FTMO fills from v9_ftmo_fills.jsonl &middot;
+  Daily loss limit: $2,000
 </div>
 </body>
 </html>"""
@@ -386,7 +434,6 @@ def write_dashboard():
 
 
 def serve(port):
-    """Simple HTTP server for the dashboard."""
     import functools
     handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(HERE))
     with http.server.HTTPServer(("0.0.0.0", port), handler) as httpd:
@@ -395,16 +442,15 @@ def serve(port):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="NQ Sleeves Dashboard")
-    parser.add_argument("--watch", action="store_true", help="Regenerate every 60s")
-    parser.add_argument("--serve", type=int, metavar="PORT", help="Serve on HTTP port")
+    parser = argparse.ArgumentParser(description="NQ v9.2 Dashboard")
+    parser.add_argument("--watch", action="store_true")
+    parser.add_argument("--serve", type=int, metavar="PORT")
     args = parser.parse_args()
 
     write_dashboard()
     print(f"Dashboard written to {OUTPUT_HTML}")
 
     if args.serve:
-        # Start regeneration thread
         def regen_loop():
             while True:
                 time.sleep(60)

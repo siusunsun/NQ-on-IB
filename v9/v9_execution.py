@@ -196,7 +196,10 @@ def market_flatten(ib: IB, contract: Contract, direction: str, qty: int):
 # ---------------- fill recorder (-> v9_trade_log.json) ----------------
 
 def record_v9_fill(instrument: str, side: str, qty: int, price: float, label: str,
-                   realized: Optional[float] = None, realized_R: Optional[float] = None) -> None:
+                   realized: Optional[float] = None, realized_R: Optional[float] = None,
+                   *, signal_px: Optional[float] = None,
+                   stop: Optional[float] = None, target: Optional[float] = None,
+                   reason: Optional[str] = None) -> None:
     """Append a fill to v9_trade_log.json in the {fills:[...]} shape the dashboard reads."""
     try:
         data = {"fills": []}
@@ -204,11 +207,20 @@ def record_v9_fill(instrument: str, side: str, qty: int, price: float, label: st
             txt = TRADE_LOG.read_text(encoding="utf-8").strip()
             if txt:
                 data = json.loads(txt)
-        data.setdefault("fills", []).append({
+        entry = {
             "time": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
             "instrument": instrument, "side": side, "qty": qty, "price": price,
             "label": label, "realized": realized, "realized_R": realized_R,
-        })
+        }
+        if signal_px is not None:
+            entry["signal_px"] = round(signal_px, 2)
+        if stop is not None:
+            entry["stop"] = round(stop, 2)
+        if target is not None:
+            entry["target"] = round(target, 2)
+        if reason is not None:
+            entry["reason"] = reason
+        data.setdefault("fills", []).append(entry)
         TRADE_LOG.write_text(json.dumps(data, indent=2), encoding="utf-8")
     except Exception:
         pass

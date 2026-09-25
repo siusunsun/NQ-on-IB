@@ -30,14 +30,12 @@ jobs:
             root@178.105.116.241:/root/nq_sleeves/nq_dashboard.html index.html \
             || echo "VPS unreachable — keeping existing HTML"
 
-          # Also pull data files for reference
+          # Pull data snapshots for reference
           mkdir -p data
           scp -o ConnectTimeout=15 -o StrictHostKeyChecking=no \
-            root@178.105.116.241:/root/nq_sleeves/nq_sleeves_heartbeat.json data/ 2>/dev/null || true
+            root@178.105.116.241:/root/v9/v9_live_heartbeat.json data/ 2>/dev/null || true
           scp -o ConnectTimeout=15 -o StrictHostKeyChecking=no \
-            root@178.105.116.241:/root/nq_sleeves/nq_sleeves_state.json data/ 2>/dev/null || true
-          scp -o ConnectTimeout=15 -o StrictHostKeyChecking=no \
-            root@178.105.116.241:/root/nq_sleeves/nq_sleeves_ledger.jsonl data/ 2>/dev/null || true
+            root@178.105.116.241:/root/v9/v9_live_trade_log.json data/ 2>/dev/null || true
 
       - name: Commit and push
         run: |
