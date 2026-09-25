@@ -1,0 +1,724 @@
+{
+  "fills": [
+    {
+      "time": "2026-06-24 03:10:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29671.0,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-06-24 04:55:53",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29787.0,
+      "label": "TARGET",
+      "realized": 232.0,
+      "realized_R": 2.9744
+    },
+    {
+      "time": "2026-06-24 14:50:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29835.75,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-06-24 17:16:29",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29518.5,
+      "label": "STOP",
+      "realized": -634.5,
+      "realized_R": -1.0209
+    },
+    {
+      "time": "2026-06-24 18:10:00",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29448.25,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-06-24 18:49:08",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29359.25,
+      "label": "STOP",
+      "realized": -178.0,
+      "realized_R": -1.0659
+    },
+    {
+      "time": "2026-06-30 19:00:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 5,
+      "price": 30554.45,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-06-30 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 30577.5,
+      "label": "EOD",
+      "realized": 46.1,
+      "realized_R": 0.4138
+    },
+    {
+      "time": "2026-07-01 19:05:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 30180.0,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-01 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 30206.5,
+      "label": "EOD",
+      "realized": 53.0,
+      "realized_R": 0.6272
+    },
+    {
+      "time": "2026-07-08 08:55:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29067.75,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-08 09:08:56",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 28949.0,
+      "label": "STOP",
+      "realized": -475.0,
+      "realized_R": -1.0747
+    },
+    {
+      "time": "2026-07-16 08:35:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29544.25,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-16 11:01:16",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29478.0,
+      "label": "STOP",
+      "realized": -265.0,
+      "realized_R": -1.0115
+    },
+    {
+      "time": "2026-07-17 04:45:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 28813.0,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-17 05:34:18",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 28764.5,
+      "label": "STOP",
+      "realized": -194.0,
+      "realized_R": -1.2597
+    },
+    {
+      "time": "2026-07-20 23:10:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 28773.5,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-21 03:18:25",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 28987.0,
+      "label": "TARGET",
+      "realized": 854.0,
+      "realized_R": 2.9448
+    },
+    {
+      "time": "2026-07-22 06:40:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29111.0,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-22 07:06:42",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29059.75,
+      "label": "STOP",
+      "realized": -205.0,
+      "realized_R": -1.0049
+    },
+    {
+      "time": "2026-07-24 03:15:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 28540.0,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-07-24 03:34:04",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 28517.0,
+      "label": "STOP",
+      "realized": -92.0,
+      "realized_R": -0.92
+    },
+    {
+      "time": "2026-08-05 15:40:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29844.5,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-05 15:56:22",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29749.75,
+      "label": "STOP",
+      "realized": -189.5,
+      "realized_R": -1.1698
+    },
+    {
+      "time": "2026-08-05 19:05:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29759.25,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-05 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29765.5,
+      "label": "EOD",
+      "realized": 12.5,
+      "realized_R": 0.1953
+    },
+    {
+      "time": "2026-08-06 13:35:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29348.75,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-06 13:35:46",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29324.5,
+      "label": "STOP",
+      "realized": -97.0,
+      "realized_R": -1.0778
+    },
+    {
+      "time": "2026-08-10 14:10:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29877.25,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-10 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29793.5,
+      "label": "EOD",
+      "realized": -167.5,
+      "realized_R": -0.5284
+    },
+    {
+      "time": "2026-08-11 14:50:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29781.75,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-11 16:25:27",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29622.5,
+      "label": "STOP",
+      "realized": -318.5,
+      "realized_R": -1.0617
+    },
+    {
+      "time": "2026-08-11 19:15:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29607.75,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-11 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29613.25,
+      "label": "EOD",
+      "realized": 11.0,
+      "realized_R": 0.0741
+    },
+    {
+      "time": "2026-08-12 15:30:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29875.5,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-12 15:32:52",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29834.75,
+      "label": "STOP",
+      "realized": -81.5,
+      "realized_R": -1.1164
+    },
+    {
+      "time": "2026-08-12 15:50:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29847.75,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-12 15:50:42",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29836.0,
+      "label": "STOP",
+      "realized": -23.5,
+      "realized_R": -1.3429
+    },
+    {
+      "time": "2026-08-14 15:55:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 30057.75,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-14 19:59:33",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 30138.5,
+      "label": "TARGET",
+      "realized": 323.0,
+      "realized_R": 2.8584
+    },
+    {
+      "time": "2026-08-17 15:00:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 30245.0,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-17 17:08:59",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 30158.25,
+      "label": "STOP",
+      "realized": -173.5,
+      "realized_R": -0.9666
+    },
+    {
+      "time": "2026-08-17 17:45:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 30123.25,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-17 18:03:44",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 30091.75,
+      "label": "STOP",
+      "realized": -126.0,
+      "realized_R": -0.9618
+    },
+    {
+      "time": "2026-08-17 18:25:00",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 30106.5,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-17 19:55:41",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 30078.5,
+      "label": "STOP",
+      "realized": -112.0,
+      "realized_R": -1.0275
+    },
+    {
+      "time": "2026-08-18 14:30:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29668.75,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-18 14:53:25",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29563.5,
+      "label": "STOP",
+      "realized": -210.5,
+      "realized_R": -1.0499
+    },
+    {
+      "time": "2026-08-19 15:20:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29622.25,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-19 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29564.0,
+      "label": "EOD",
+      "realized": -116.5,
+      "realized_R": -0.2363
+    },
+    {
+      "time": "2026-08-20 09:05:00",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29513.0,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-20 11:21:58",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29449.5,
+      "label": "STOP",
+      "realized": -254.0,
+      "realized_R": -1.0539
+    },
+    {
+      "time": "2026-08-20 19:05:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29271.0,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-20 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29296.25,
+      "label": "EOD",
+      "realized": 50.5,
+      "realized_R": 0.37
+    },
+    {
+      "time": "2026-08-21 15:30:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29368.0,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-21 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29398.5,
+      "label": "EOD",
+      "realized": 61.0,
+      "realized_R": 0.2061
+    },
+    {
+      "time": "2026-08-24 06:25:03",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29167.25,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-24 07:53:45",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29138.0,
+      "label": "STOP",
+      "realized": -117.0,
+      "realized_R": -0.9832
+    },
+    {
+      "time": "2026-08-24 15:20:00",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29057.5,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-24 15:40:17",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29164.0,
+      "label": "TARGET",
+      "realized": 213.0,
+      "realized_R": 1.024
+    },
+    {
+      "time": "2026-08-25 14:55:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29246.25,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-25 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29223.75,
+      "label": "EOD",
+      "realized": -45.0,
+      "realized_R": -0.2079
+    },
+    {
+      "time": "2026-08-26 15:45:01",
+      "instrument": "TLB_LONG",
+      "side": "BUY",
+      "qty": 1,
+      "price": 29281.75,
+      "label": "TLB_LONG_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-08-26 19:25:00",
+      "instrument": "TLB_LONG",
+      "side": "SELL",
+      "qty": 1,
+      "price": 29346.0,
+      "label": "EOD",
+      "realized": 128.5,
+      "realized_R": 0.514
+    },
+    {
+      "time": "2026-09-01 02:55:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29456.5,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-09-01 05:39:14",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29520.75,
+      "label": "TARGET",
+      "realized": 257.0,
+      "realized_R": 2.954
+    },
+    {
+      "time": "2026-09-01 09:45:00",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29213.625,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-09-01 11:05:35",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29182.5,
+      "label": "STOP",
+      "realized": -124.5,
+      "realized_R": -1.0596
+    },
+    {
+      "time": "2026-09-02 10:00:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 28973.25,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-09-02 11:02:24",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 28936.5,
+      "label": "STOP",
+      "realized": -147.0,
+      "realized_R": -1.1221
+    },
+    {
+      "time": "2026-09-14 08:10:01",
+      "instrument": "VWAP_LONG_R3",
+      "side": "BUY",
+      "qty": 2,
+      "price": 29236.0,
+      "label": "VWAP_LONG_R3_ENTRY",
+      "realized": null,
+      "realized_R": null
+    },
+    {
+      "time": "2026-09-14 08:19:45",
+      "instrument": "VWAP_LONG_R3",
+      "side": "SELL",
+      "qty": 2,
+      "price": 29198.75,
+      "label": "STOP",
+      "realized": -149.0,
+      "realized_R": -0.9675
+    }
+  ]
+}
