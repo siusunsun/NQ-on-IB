@@ -24,7 +24,7 @@
     },
     "R3_REV": {
       "name": "R3_REV",
-      "active_today": true,
+      "active_today": false,
       "in_position": false,
       "side": null,
       "entry_price": null,
@@ -41,7 +41,7 @@
     },
     "CCI_AM": {
       "name": "CCI_AM",
-      "active_today": true,
+      "active_today": false,
       "in_position": false,
       "side": null,
       "entry_price": null,
@@ -72,10 +72,44 @@
       "trade_count_today": 0,
       "qty": 0,
       "entry_session": null
+    },
+    "TLB_LONG": {
+      "name": "TLB_LONG",
+      "active_today": true,
+      "in_position": false,
+      "side": null,
+      "entry_price": null,
+      "stop_price": null,
+      "target_price": null,
+      "entry_time": null,
+      "entry_order_id": null,
+      "stop_order_id": null,
+      "target_order_id": null,
+      "realized_R": 0.0,
+      "trade_count_today": 0,
+      "qty": 0,
+      "entry_session": null
+    },
+    "VWAP_SHORT_R1": {
+      "name": "VWAP_SHORT_R1",
+      "active_today": false,
+      "in_position": false,
+      "side": null,
+      "entry_price": null,
+      "stop_price": null,
+      "target_price": null,
+      "entry_time": null,
+      "entry_order_id": null,
+      "stop_order_id": null,
+      "target_order_id": null,
+      "realized_R": 0.0,
+      "trade_count_today": 0,
+      "qty": 0,
+      "entry_session": null
     }
   },
   "cum_realized_usd": 0.0,
   "halted": false,
-  "last_heartbeat": "2026-09-25T05:22:49.903834+00:00",
+  "last_heartbeat": "2026-09-25T10:19:03.647563+00:00",
   "connected": true
 }
